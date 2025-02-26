@@ -1137,6 +1137,35 @@ footer {
     opacity: 0.7;
 }
 
+/* Footer Contact Info */
+.contact-info {
+    margin-top: 20px;
+}
+
+.contact-info p {
+    margin: 15px 0; /* Increased margin for more space */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: white;
+}
+
+.contact-info i {
+    margin-right: 10px;
+    color: var(--accent); /* Use accent color for icons */
+}
+
+.contact-info a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+    color: var(--accent); /* Use accent color on hover */
+}
+
 /* Services Section */
 .services {
     background-color: var(--lighter);
