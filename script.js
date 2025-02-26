@@ -1,91 +1,82 @@
-const toggleButton = document.createElement('button');
-toggleButton.innerText = 'Toggle Dark Mode';
-toggleButton.style.position = 'fixed';
-toggleButton.style.bottom = '20px';
-toggleButton.style.right = '20px';
-toggleButton.style.padding = '10px 20px';
-toggleButton.style.backgroundColor = '#2c3e50';
-toggleButton.style.color = '#fff';
-toggleButton.style.border = 'none';
-toggleButton.style.borderRadius = '5px';
-toggleButton.style.cursor = 'pointer';
-
-document.body.appendChild(toggleButton);
-
-toggleButton.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-});
-
-// Add dark mode styles
-const style = document.createElement('style');
-style.innerHTML = `
-    .dark-mode {
-        background-color: #1a1a1a;
-        color: #f4f4f4;
-    }
-    .dark-mode header, .dark-mode footer {
-        background-color: #1a1a1a;
-    }
-    .dark-mode .card {
-        background-color: #2c3e50;
-        color: #fff;
-    }
-    .dark-mode nav {
-        background-color: #1a1a1a;
-    }
-    .dark-mode a {
-        color: #00bcd4;
-    }
-    .dark-mode a:hover {
-        color: #0097a7;
-    }
-    .dark-mode .form-group input,
-    .dark-mode .form-group textarea {
-        background-color: #2c3e50;
-        color: #fff;
-    }
-    .dark-mode button[type="submit"] {
-        background-color: #00bcd4;
-        color: #fff;
-    }
-    .dark-mode button[type="submit"]:hover {
-        background-color: #0097a7;
-    }
-`;
-document.head.appendChild(style);
-
-// Smooth scrolling with offset
-document.querySelectorAll('nav a').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
+// Smooth Scrolling for Anchor Links and Dot Navigation
+document.querySelectorAll('a[href^="#"], .section-dots .dot').forEach(element => {
+    element.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        const offset = 80; // Adjust this value based on your header/nav height
-        window.scrollTo({
-            top: target.offsetTop - offset,
+        const targetId = this.getAttribute('href') || `#${this.getAttribute('data-section')}`;
+        document.querySelector(targetId).scrollIntoView({
             behavior: 'smooth'
         });
     });
 });
 
-// Contact Form Validation
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
+// Scroll to Top Button
+const scrollBtn = document.querySelector('.scroll-btn');
 
-    if (!name || !email || !message) {
-        alert('Please fill out all fields.');
-        return;
-    }
-
-    if (!email.includes('@')) {
-        alert('Please enter a valid email address.');
-        return;
-    }
-
-    // Simulate form submission (replace with actual backend integration)
-    console.log(`Name: ${name}, Email: ${email}, Message: ${message}`);
-    alert('Thank you for your message! I will get back to you soon.');
-    document.getElementById('contactForm').reset();
+window.addEventListener('scroll', () => {
+    scrollBtn.classList.toggle('visible', window.scrollY > 300);
 });
+
+scrollBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
+// FAQ Dropdown Functionality
+document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+        const faqItem = question.parentElement;
+        const faqAnswer = faqItem.querySelector('.faq-answer');
+        const faqIcon = question.querySelector('.faq-icon i');
+
+        faqItem.classList.toggle('active');
+        faqAnswer.style.maxHeight = faqItem.classList.contains('active') ? faqAnswer.scrollHeight + 'px' : '0';
+        faqIcon.classList.toggle('fa-minus', faqItem.classList.contains('active'));
+        faqIcon.classList.toggle('fa-plus', !faqItem.classList.contains('active'));
+    });
+});
+
+// Mobile Menu Toggle
+const menuToggle = document.querySelector('.menu-toggle');
+const menu = document.querySelector('.menu');
+
+menuToggle.addEventListener('click', () => {
+    menu.classList.toggle('active');
+});
+
+// Close Mobile Menu When a Link is Clicked
+document.querySelectorAll('.menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        menu.classList.remove('active');
+    });
+});
+
+// Section Navigation Dots
+const sections = document.querySelectorAll('section');
+
+window.addEventListener('scroll', () => {
+    let currentSection = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.scrollY >= sectionTop - sectionHeight / 3) {
+            currentSection = section.getAttribute('id');
+        }
+    });
+
+    document.querySelectorAll('.section-dots .dot').forEach(dot => {
+        dot.classList.toggle('active', dot.getAttribute('data-section') === currentSection);
+    });
+});
+
+// Form Submission Handling (Optional)
+const contactForm = document.querySelector('.contact-form');
+
+if (contactForm) {
+    contactForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        alert('Thank you for your message! I will get back to you soon.');
+        this.reset();
+    });
+}
