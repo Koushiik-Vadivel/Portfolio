@@ -488,8 +488,11 @@ nav {
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* Changed to 2 columns */
     gap: 2rem;
+    max-width: 1200px; /* Added to limit width and center the grid */
+    margin: 0 auto; /* Center the grid */
+    padding: 0 2rem; /* Add padding for smaller screens */
 }
 
 .project-card {
